@@ -7,12 +7,6 @@ Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red
 Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red
 Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green"""
 
-MaximumMapping = {
-    "red":12,
-    "green":13,
-    "blue":14,
-}
-
 
 def Parse_Gameplay(Gameplay, Mapping):
     for Round in Gameplay.split("; "):
@@ -20,19 +14,18 @@ def Parse_Gameplay(Gameplay, Mapping):
             ShowingSplit = Showing.split(" ")
             AmountShown = int(ShowingSplit[0])
             ColorShown = ShowingSplit[1].strip()
-            if AmountShown > Mapping[ColorShown]:
+            if Mapping[ColorShown] == 0:
+                Mapping[ColorShown] = AmountShown
+            elif AmountShown > Mapping[ColorShown]:
                 Mapping[ColorShown] = AmountShown
 
 
-def Check_If_Possible(Mapping) -> bool:
-    for Color in Mapping.keys():
-        if Mapping[Color] > MaximumMapping[Color]:
-            return False
-    return True
+def Get_Power(Powers):
+    return eval("*".join([str(Power) for Power in Powers.values()])) # What a fuckin beauty lmfao
 
 
-def Parse_Games(Records:List[str]) -> int:
-    PossibleGames = []
+def Parse_Games(Records:List[str]) -> List[int]:
+    Powers = []
     for Game in Records:
         Mapping = {
             "red":0,
@@ -43,11 +36,10 @@ def Parse_Games(Records:List[str]) -> int:
         GameNumber = int(GameDataSplit[0].split(" ")[1])
         Gameplay  = GameDataSplit[1]
         Parse_Gameplay(Gameplay, Mapping)
-        if Check_If_Possible(Mapping) == True:
-            PossibleGames.append(GameNumber)
+        Powers.append(Get_Power(Mapping))
     
-    return sum(PossibleGames)
+    return sum(Powers)
 
-with open("Day2PuzzleInput.txt") as GamesRecordsDocuments:
+with open("Day2.2PuzzleInput.txt") as GamesRecordsDocuments:
     Answer:int = Parse_Games(GamesRecordsDocuments.readlines())
     print(Answer)
