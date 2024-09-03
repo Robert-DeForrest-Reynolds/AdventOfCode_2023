@@ -21,9 +21,6 @@ def Determine_Scratch_Pile_Worth(ScratchCardPile:List[str]):
         WinningNumbers = [Number for Number in WinningNumbers if Number != ""]
         PlayerNumbers = [Number for Number in PlayerNumbers if Number != ""]
         FoundNumbers = []
-        print(CardNumber)
-        print(WinningNumbers)
-        print(PlayerNumbers)
         for Number in PlayerNumbers:
             if Number in WinningNumbers:
                 if Number not in FoundNumbers:
@@ -32,9 +29,6 @@ def Determine_Scratch_Pile_Worth(ScratchCardPile:List[str]):
                         Points = 1
                     else:
                         Points *= 2
-        print(Points)
-        print(FoundNumbers)
-        print("\n\n")
         TotalPoints += Points
     return TotalPoints
 
