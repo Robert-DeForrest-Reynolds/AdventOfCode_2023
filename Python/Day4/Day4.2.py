@@ -1,4 +1,5 @@
 from typing import List
+from re import sub
 
 ExampleCase = """\
 Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53
@@ -15,9 +16,9 @@ def Determine_Scratch_Pile_Worth(ScratchCardPile:List[str]):
     Index = 0
     while ScratchCardPile != []:
         ScratchCard = ScratchCardPile[0]
-        print(ScratchCard)
         ScratchCardSplit = ScratchCard.split(": ")
-        CardNumber = ScratchCardSplit[0]
+        CardNumber = int(sub(r"\s+", ' ', ScratchCardSplit[0]).split(" ")[1])
+        print(ScratchCardSplit)
         ScratchCardSplit = ScratchCardSplit[1].split(" | ")
         WinningNumbers = ScratchCardSplit[0].replace("  ", " ").split(" ")
         PlayerNumbers = ScratchCardSplit[1].replace("  ", " ").replace("\n", "").split(" ")
@@ -30,18 +31,18 @@ def Determine_Scratch_Pile_Worth(ScratchCardPile:List[str]):
                     FoundNumbers.append(Number)
         FoundNumbersAmount = len(FoundNumbers)
         EarnedCards.append(ScratchCard)
-        ScratchCardPile += OriginalScratchPile[Index+1:FoundNumbersAmount+1]
+        if FoundNumbersAmount > 0:
+            ScratchCardPile += OriginalScratchPile[CardNumber:CardNumber+FoundNumbersAmount]
         ScratchCardPile = ScratchCardPile[1:]
         Index += 1
     
-    # print("\n".join(EarnedCards))
     TotalCards = len(EarnedCards)
     return TotalCards
 
 
-# with open("Day4PuzzleInput.txt") as ScratchCardsFile:
-#     Answer:int = Determine_Scratch_Pile_Worth(ScratchCardsFile.readlines())
-#     print(Answer)
+with open("Day4.2PuzzleInput.txt") as ScratchCardsFile:
+    Answer:int = Determine_Scratch_Pile_Worth([Line.replace("\n", "") for Line in ScratchCardsFile.readlines()])
+    print(Answer)
 
-Answer:int = Determine_Scratch_Pile_Worth(ExampleCase)
-print(Answer)
+# Answer:int = Determine_Scratch_Pile_Worth(ExampleCase)
+# print(Answer)
